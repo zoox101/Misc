@@ -17,7 +17,6 @@ public class User {
 	 */
 	private static String get(String type) {
 		while(true) { 
-			//System.out.print("Please enter " + type + ": ");
 			try {return reader.readLine();} 
 			catch(IOException e) {}
 		}
