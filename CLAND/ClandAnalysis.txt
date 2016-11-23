@@ -18,9 +18,13 @@ Probability of getting a peppermint snail from killing a boss:
 Mean:      8.00%
 95% Conf*: P < 13.98%
 
-Probability of getting a ST or WhiteBag: 
+Probability of getting a ST or whiteBag from killing a boss: 
 Mean:      1.00%
 95% Conf*: P <  4.66%
+
+Probability of getting a potion from killing a boss:
+Mean:      9.00%
+95% Conf*: 5.52% - 15.17%
 
 * Confidence levels are determined by finding the probability for which a binomial gives a less than 5% chance of resulting in the sampled value. See R code for more info.
 
@@ -95,4 +99,10 @@ highlow(function(x) {mybin(x, successes=numsnails, total=length(cland$DROPS))})
 numuts = length(subset(cland$DROPS, cland$DROPS=="ST-RING"))
 numuts/length(cland$DROPS)
 highlow(function(x) {mybin(x, successes=numuts, total=length(cland$DROPS))})
+
+#Probability of getting a potion
+numpots = length(cland$POTS) - length(subset(cland$POTS, cland$POTS==0))
+numpots/length(cland$POTS)
+highlow(function(x) {mybinhigh(x, successes=numpots, total=length(cland$POTS))})
+highlow(function(x) {mybinlow(x, successes=numpots, total=length(cland$POTS))})
 

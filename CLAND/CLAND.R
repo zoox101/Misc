@@ -32,9 +32,15 @@ pnothing; pnothing + c(1,-1) * qnorm(0.025) * sdnothing
 #Assuming CRING, SNAIL, and White Bag drop rates are the same for each boss
 
 #Returns TRUE if pbinomial(successes, total, x) < alpha
-mybin = function(x, successes=0, total=100, alpha=0.05) {
+mybinlow = function(x, successes=0, total=100, alpha=0.05) {
   pbin = pbinom(successes, total, x)
   if(pbin<alpha) return(FALSE); return(TRUE)
+}
+
+#Returns TRUE if pbinomial(successes, total, x) > alpha
+mybinhigh = function(x, successes=0, total=100, alpha=0.05) {
+  pbin = 1-pbinom(successes, total, x)
+  if(pbin>alpha) return(FALSE); return(TRUE)
 }
 
 #Plays a game of higher-lower with the given function
@@ -50,15 +56,22 @@ highlow = function(func, min=0, max=1, iter=10000) {
 #Proability of getting a CRING
 numcrings = length(subset(cland$DROPS, cland$DROPS=="CRING"))
 numcrings/length(cland$DROPS)
-highlow(function(x) {mybin(x, successes=numcrings, total=length(cland$DROPS))})
+highlow(function(x) {mybinlow(x, successes=numcrings, total=length(cland$DROPS))})
 
 #Probability of getting a SNAIL
 numsnails = length(subset(cland$DROPS, cland$DROPS=="SNAIL"))
 numsnails/length(cland$DROPS)
-highlow(function(x) {mybin(x, successes=numsnails, total=length(cland$DROPS))})
+highlow(function(x) {mybinlow(x, successes=numsnails, total=length(cland$DROPS))})
 
 #Probability of getting a UT+
 numuts = length(subset(cland$DROPS, cland$DROPS=="ST-RING"))
 numuts/length(cland$DROPS)
-highlow(function(x) {mybin(x, successes=numuts, total=length(cland$DROPS))})
+highlow(function(x) {mybinlow(x, successes=numuts, total=length(cland$DROPS))})
+
+#Probability of getting a potion
+numpots = length(cland$POTS) - length(subset(cland$POTS, cland$POTS==0))
+numpots/length(cland$POTS)
+highlow(function(x) {mybinhigh(x, successes=numpots, total=length(cland$POTS))})
+highlow(function(x) {mybinlow(x, successes=numpots, total=length(cland$POTS))})
+
 
