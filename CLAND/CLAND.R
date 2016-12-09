@@ -32,13 +32,13 @@ pnothing; pnothing + c(1,-1) * qnorm(0.025) * sdnothing
 #Assuming CRING, SNAIL, and White Bag drop rates are the same for each boss
 
 #Returns TRUE if pbinomial(successes, total, x) < alpha
-mybinlow = function(x, successes=0, total=100, alpha=0.05) {
+mybinlow = function(x, successes=0, total=100, alpha=0.025) {
   pbin = pbinom(successes, total, x)
   if(pbin<alpha) return(FALSE); return(TRUE)
 }
 
 #Returns TRUE if pbinomial(successes, total, x) > alpha
-mybinhigh = function(x, successes=0, total=100, alpha=0.05) {
+mybinhigh = function(x, successes=0, total=100, alpha=0.025) {
   pbin = 1-pbinom(successes, total, x)
   if(pbin>alpha) return(FALSE); return(TRUE)
 }
@@ -56,6 +56,7 @@ highlow = function(func, min=0, max=1, iter=10000) {
 #Proability of getting a CRING
 numcrings = length(subset(cland$DROPS, cland$DROPS=="CRING"))
 numcrings/length(cland$DROPS)
+highlow(function(x) {mybinhigh(x, successes=numcrings, total=length(cland$DROPS))})
 highlow(function(x) {mybinlow(x, successes=numcrings, total=length(cland$DROPS))})
 
 #Probability of getting a SNAIL
