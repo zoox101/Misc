@@ -28,7 +28,7 @@ public class User {
 	 * Gets a string from the user.
 	 * @return a string given by the user.
 	 */
-	public static String getString(String prompt) {return get("a string");}
+	public static String getString(String prompt) {return get(prompt);}
 	public static String getString() {return getString(null);}
 
 	/**
