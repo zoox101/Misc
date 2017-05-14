@@ -17,9 +17,10 @@ public class TikTok {
 		if(args.length != 1) {System.out.println("Invalid number of arguments."); return;}
 		String input = args[0]; 
 		
-		if(input.equals("0")) tik();
-		else if(input.equals("1")) tok();
-		else System.out.println("Argument not found.");
+		if(input.equals("0")) {tik();}
+		else if(input.equals("1")) {tok();}
+		else if(input.equals("2")) {tak();}
+		else {System.out.println("Argument not found.");}
 	}
 	
 	public static void tik() throws IOException {
@@ -55,7 +56,7 @@ public class TikTok {
 			for(ArrayList<String> linekeys: keys)
 				if(linekeys.contains(userkey))
 					key = linekeys.get(0);
-		}		
+		}
 		
 		//Writing tik info to file
 		System.out.println("Writing to " + key);
@@ -75,6 +76,10 @@ public class TikTok {
 		tokread.close();
 		if(working == null) {System.out.println("No operation in progress."); return;}
 		
+		//Getting the notes from the user
+		System.out.print("Comments: ");
+		String userinput = User.getString();
+		
 		//Creating the String to append
 		String string = "";
 		Date tok = new Date();
@@ -84,8 +89,7 @@ public class TikTok {
 		Long tiktok = tok.getTime() - tik.getTime();
 		tiktok = tiktok/360000;
 		string += String.valueOf(((double)tiktok)/10) + " hours: ";
-		System.out.print("Comments: ");
-		string+= User.getString() + "\n\n";
+		string+= userinput + "\n\n";
 		
 		//Appending string to file
 		File file = new File(workingsplit[0]);
@@ -98,7 +102,24 @@ public class TikTok {
 		FileWriter workingwriter = new FileWriter(wfile);
 		workingwriter.write("");
 		workingwriter.close();
+	}
+	
+	public static void tak() throws IOException {
 		
+		//Getting info from working file
+		BufferedReader takread = new BufferedReader(new FileReader(new File(workingfile)));
+		String working = takread.readLine(); takread.close();
+		if(working == null) {System.out.println("No operation in progress."); return;}
+		String directory = working.split(",")[0];
+		
+		//Getting the comments for the current file
+		tok();
+		
+		//Saving the current time to a file
+		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(workingfile)));
+		Date tak = new Date();
+		writer.write(directory + "," + tak.getTime());
+		writer.close();
 	}
 
 }
