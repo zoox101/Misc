@@ -9,8 +9,8 @@ import java.util.Date;
 
 public class TikTok {
 	
-	private static String workingfile = "/Users/WilliamBooker/Commands/.working.txt";
-	private static String keylistfile = "/Users/WilliamBooker/Commands/keylist.txt";
+	private static String workingfile = "/Users/william/Commands/.working.txt";
+	private static String keylistfile = "/Users/william/Commands/keylist.txt";
 	
 	public static void main(String[] args) throws IOException {
 		
