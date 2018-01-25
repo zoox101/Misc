@@ -7,24 +7,38 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
+//Time logging class
 public class TikTok {
 	
-	private static String workingfile = "/Users/william/Commands/.working.txt";
-	private static String keylistfile = "/Users/william/Commands/keylist.txt";
+	//NOTE: Changed .tictoc to tictoc
+	//Setting the save files
+	private static String workingfile = System.getenv("HOME") + File.separator + 
+			".tictoc" + File.separator + ".working";
+	private static String keylistfile = System.getenv("HOME") + File.separator + 
+			".tictoc" + File.separator + "keylist";
 	
+	//Executes the time keeper function
 	public static void main(String[] args) throws IOException {
+				
+		//Getting the inputs from the command line
+		if(args.length != 1 && args.length != 2) {
+			System.out.println("Invalid number of arguments."); return;}
+		String operation = args[0]; 
+		String inputs = null;
+		if(args.length == 2) {
+			 inputs = args[1].toLowerCase();}
 		
-		if(args.length != 1) {System.out.println("Invalid number of arguments."); return;}
-		String input = args[0]; 
-		
-		if(input.equals("0")) {tik();}
-		else if(input.equals("1")) {tok();}
-		else if(input.equals("2")) {tak();}
+		//Choosing and executing the correct operation
+		if(operation.equals("0")) {tik(inputs);}
+		else if(operation.equals("1")) {tok(inputs);}
+		else if(operation.equals("2")) {tak(inputs);}
 		else {System.out.println("Argument not found.");}
 	}
 	
-	public static void tik() throws IOException {
+	//Clocks the user in
+	public static void tik(String userkey) throws IOException {
 		
+		//Checks to see if the user is currently clocked in somewhere else
 		BufferedReader tikcheck = new BufferedReader(new FileReader(new File(workingfile)));
 		String linecheck;
 		if((linecheck=tikcheck.readLine())!=null) {
@@ -48,14 +62,16 @@ public class TikTok {
 			keys.add(linekeys);
 		}
 		
-		//Getting key from user
-		String key = "";
-		while(key.equals("")) {
-			System.out.print("Enter key: ");
-			String userkey = User.getString().toLowerCase();
+		//If the user didn't enter a key, gets key from user
+		String key = null;
+		while(key == null) {
+			if(userkey == null) {
+				System.out.print("Enter key: ");
+				userkey = User.getString().toLowerCase();}
 			for(ArrayList<String> linekeys: keys)
 				if(linekeys.contains(userkey))
 					key = linekeys.get(0);
+			userkey = null;
 		}
 		
 		//Writing tik info to file
@@ -68,7 +84,8 @@ public class TikTok {
 		writer.close();
 	}
 	
-	public static void tok() throws IOException {
+	//Clocks the user out
+	public static void tok(String userinput) throws IOException {
 		
 		//Getting info from working file
 		BufferedReader tokread = new BufferedReader(new FileReader(new File(workingfile)));
@@ -77,8 +94,9 @@ public class TikTok {
 		if(working == null) {System.out.println("No operation in progress."); return;}
 		
 		//Getting the notes from the user
-		System.out.print("Comments: ");
-		String userinput = User.getString();
+		if(userinput == null) {
+			System.out.print("Comments: ");
+			userinput = User.getString();}
 		
 		//Creating the String to append
 		String string = "";
@@ -92,7 +110,7 @@ public class TikTok {
 		string+= userinput + "\n\n";
 		
 		//Appending string to file
-		File file = new File(workingsplit[0]);
+		File file = new File(System.getenv("HOME") + File.separator + workingsplit[0]);
 		FileWriter writer = new FileWriter(file, true);
 		writer.write(string);
 		writer.close();
@@ -104,7 +122,8 @@ public class TikTok {
 		workingwriter.close();
 	}
 	
-	public static void tak() throws IOException {
+	//Allows the user to add comments to the file without clocking them out
+	public static void tak(String userinput) throws IOException {
 		
 		//Getting info from working file
 		BufferedReader takread = new BufferedReader(new FileReader(new File(workingfile)));
@@ -113,7 +132,7 @@ public class TikTok {
 		String directory = working.split(",")[0];
 		
 		//Getting the comments for the current file
-		tok();
+		tok(userinput);
 		
 		//Saving the current time to a file
 		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(workingfile)));
